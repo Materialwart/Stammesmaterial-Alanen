@@ -1,2 +1,2 @@
 # Stammesmaterial-Alanen
-INventurprogramm Alanen
+Inventurprogramm Alanen
