@@ -1,0 +1,167 @@
+/* INVENTUR-APP: Stammesmaterial Alanen */
+
+/* Projektstruktur:
+.
+├── index.html
+├── style.css
+├── script.js
+└── README.md
+*/
+
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stammesmaterial Alanen</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>📦 Stammesmaterial Alanen</h1>
+    <input type="text" id="search" placeholder="Suche...">
+    <table id="inventory">
+        <thead>
+            <tr>
+                <th>Artikel</th>
+                <th>Anzahl</th>
+                <th>Zustand</th>
+                <th>Standort</th>
+                <th>Kommentar</th>
+                <th>Aktionen</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <h2>➕ Neues Material</h2>
+    <form id="itemForm">
+        <input type="text" id="artikel" placeholder="Artikel" required>
+        <input type="number" id="anzahl" placeholder="Anzahl" required>
+        <input type="text" id="zustand" placeholder="Zustand">
+        <input type="text" id="standort" placeholder="Standort">
+        <input type="text" id="kommentar" placeholder="Kommentar">
+        <button type="submit">Hinzufügen</button>
+    </form>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+/* style.css */
+body {
+    font-family: sans-serif;
+    margin: 2rem;
+    background-color: #f9f9f9;
+}
+h1, h2 {
+    color: #333;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+th, td {
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    text-align: left;
+}
+input, button {
+    margin: 0.3rem;
+    padding: 0.5rem;
+}
+button {
+    background-color: #007acc;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #005fa3;
+}
+
+/* script.js */
+const inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+const tableBody = document.querySelector('#inventory tbody');
+const form = document.getElementById('itemForm');
+const searchInput = document.getElementById('search');
+
+function renderTable(items) {
+    tableBody.innerHTML = '';
+    items.forEach((item, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${item.artikel}</td>
+            <td>${item.anzahl}</td>
+            <td>${item.zustand}</td>
+            <td>${item.standort}</td>
+            <td>${item.kommentar}</td>
+            <td><button onclick="deleteItem(${index})">🗑️</button></td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+function deleteItem(index) {
+    inventory.splice(index, 1);
+    localStorage.setItem('inventory', JSON.stringify(inventory));
+    renderTable(inventory);
+}
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const item = {
+        artikel: form.artikel.value,
+        anzahl: form.anzahl.value,
+        zustand: form.zustand.value,
+        standort: form.standort.value,
+        kommentar: form.kommentar.value
+    };
+    inventory.push(item);
+    localStorage.setItem('inventory', JSON.stringify(inventory));
+    renderTable(inventory);
+    form.reset();
+});
+
+searchInput.addEventListener('input', () => {
+    const filtered = inventory.filter(item =>
+        Object.values(item).some(val => val.toLowerCase().includes(searchInput.value.toLowerCase()))
+    );
+    renderTable(filtered);
+});
+
+renderTable(inventory);
+
+/* README.md */
+# 📦 Stammesmaterial Alanen – Inventur App
+
+Dies ist eine einfache, cloudfähige Inventur-App für euren Pfadfinderstamm. Sie läuft komplett im Browser und speichert Daten lokal im Gerät (später anpassbar).
+
+## ✅ Funktionen
+- Material hinzufügen, bearbeiten, löschen
+- Suche nach Einträgen
+- Daten bleiben im Browser gespeichert
+
+## 🚀 Deploy-Anleitung (für Anfänger)
+
+1. **GitHub-Konto anlegen:**
+   - Gehe auf https://github.com und erstelle ein kostenloses Konto.
+
+2. **Neues Repository erstellen:**
+   - Klicke oben rechts auf „+“ → „New repository“
+   - Name: z. B. `inventur-alanen`
+   - Öffentlich (public), kein README
+
+3. **Dateien hochladen:**
+   - Entpacke die 3 Dateien (`index.html`, `style.css`, `script.js`, `README.md`)
+   - Gehe in dein neues GitHub-Repo → Reiter „Code“ → Klicke auf „Add file“ → „Upload files“ → Dateien auswählen → Commit (hochladen)
+
+4. **GitHub Pages aktivieren (Hosting):**
+   - Gehe zu „Settings“ → „Pages“ (links unten)
+   - Bei „Branch“ → `main`, Ordner `root`
+   - Auf „Save“ klicken
+   - Nach wenigen Minuten findest du deine App unter:
+     `https://dein-benutzername.github.io/inventur-alanen/`
+
+Fertig! Deine App ist online und nutzbar von jedem Browser! 🌐
