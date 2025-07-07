@@ -1,2 +1,3 @@
-# Stammesmaterial-Alanen
-Inventurprogramm Alanen
+# Stammesmaterial Alanen
+
+Dies ist der Code der App.
